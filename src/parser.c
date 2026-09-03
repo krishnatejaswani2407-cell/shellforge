@@ -19,7 +19,7 @@ static void command_init(command_t *cmd)
         cmd->argv[i] = NULL;
 }
 
-int parser(token_list_t *tokens,
+int parse(token_list_t *tokens,
           pipeline_t *pipeline)
 {
     pipeline->command_count = 1;

@@ -41,7 +41,7 @@ typedef struct
 
 /* Parser */
 
-int parser(token_list_t *tokens,
+int parse(token_list_t *tokens,
           pipeline_t *pipeline);
 
 /* Debug */
