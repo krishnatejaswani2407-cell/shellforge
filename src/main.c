@@ -12,6 +12,7 @@
 #include "expand.h"
 #include "builtin.h"
 #include "executor.h"
+#include "jobs.h"
 
 int main(void)
 {
@@ -25,12 +26,13 @@ int main(void)
     printf("=====================================\n");
 
     /* =============================================
-       INSTALL BACKGROUND PROCESS HANDLER
+       INITIALIZE JOB CONTROL
        ============================================= */
 
+    jobs_init();
     setup_background_handler();
 
-    /* Enable readline history */
+    /* Initialize readline history */
     using_history();
 
     token_list_t tokens;
@@ -38,14 +40,16 @@ int main(void)
 
     char *line;
 
+    /* =============================================
+       MAIN SHELL LOOP
+       ============================================= */
+
     while (1)
     {
-        /* =============================================
-           READ COMMAND
-           ============================================= */
-
+        /* Read command from user */
         line = readline("shellforge$ ");
 
+        /* Ctrl+D */
         if (line == NULL)
         {
             printf("\nGoodbye!\n");
@@ -74,21 +78,23 @@ int main(void)
         add_history(line);
 
         /* =============================================
-           MILESTONE 2.1 - LEXER / TOKENIZATION
+           MILESTONE 2.1
+           LEXER / TOKENIZATION
            ============================================= */
 
         lexer(line, &tokens);
 
-        /* Uncomment for debugging */
+        /* Debug if required */
         /* token_print(&tokens); */
 
         /* =============================================
-           MILESTONE 2.2 - PARSER + EXPANSION
+           MILESTONE 2.2
+           PARSER + VARIABLE EXPANSION
            ============================================= */
 
         /*
          * IMPORTANT:
-         * Your parser function appears to be called parse(),
+         * The parser function is called parse(),
          * not parser().
          */
 
@@ -96,7 +102,7 @@ int main(void)
         {
             expand_variables(&pipeline);
 
-            /* Uncomment for debugging */
+            /* Debug if required */
             /* pipeline_print(&pipeline); */
         }
 
@@ -118,6 +124,7 @@ int main(void)
 
         execute_pipeline(&pipeline);
 
+        /* Free input line */
         free(line);
     }
 

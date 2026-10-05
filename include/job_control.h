@@ -11,6 +11,4 @@ void take_terminal_back(void);
 
 pid_t get_shell_pgid(void);
 
-void setup_background_handler(void);
-
 #endif
